@@ -53,6 +53,18 @@
 				maximumFileSizeError: 'Maximální velikost souboru překročena.'
 			}
 		},
+		'ru-RU': {
+			file: {
+				file: 'Файл',
+				btn: 'Файл',
+				insert: 'Вставить файл',
+				selectFromFiles: 'Выбрать файл',
+				url: 'URL файла',
+				maximumFileSize: 'Максимальный размер файла',
+				maximumFileSizeError: 'Превышен максимальный размер файла.'
+			}
+		},
+		
 	});
 	
 	$.extend($.summernote.options, {
