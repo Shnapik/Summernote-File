@@ -1,6 +1,6 @@
 {
   "name": "summernote-file",
-  "version": "0.0.3",
+  "version": "1.1",
   "description": "Summernote plugin to insert files by URL or file upload",
   "main": "summernote-file.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
 	"type": "git",
-	"url": "git+https://github.com/nobsod-freelance/summernote-file.git"
+	"url": "git+https://github.com/Shnapik/summernote-file.git"
   },
   "keywords": [
 	"summernote",
@@ -16,12 +16,13 @@
 	"upload"
   ],
   "author": {
-	"name": "nobsod - Mathieu Coingt",
+	"name": "Shnapik & nobsod - Mathieu Coingt",
+	"url": "https://culabra.ru/"
 	"url": "https://www.nobsod.fr"
   },
   "license": "MIT",
   "bugs": {
-	"url": "https://github.com/nobsod-freelance/summernote-file/issues"
+	"url": "https://github.com/Shnapik/summernote-file/issues"
   },
-  "homepage": "https://github.com/nobsod-freelance/summernote-file#readme"
+  "homepage": "https://github.com/Shnapik/summernote-file#readme"
 }
