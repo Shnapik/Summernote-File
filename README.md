@@ -3,13 +3,12 @@
 Summernote File - Плагин для текстового редактора Summernote, который позволяет загружать картинки и различные файлы и вставлять их в текстовое поле редактора в виде ссылки на него. 
 
 <b>Версия:</b> 1.1 от 09.10.2021<br>
-<b>Предложения/Баги/Ошибки принимаются на сайте: </b> [culabra.ru](https://culabra.ru/)<br><br>
+<b>Предложения/Баги/Ошибки принимаются на сайте: </b> [culabra.ru](https://culabra.ru/summernote-file-zagruzka-fajlov-na-server-dlya-redaktora-summernote)<br><br>
 
 
 
 [Summernote](https://summernote.org/) сам плагин текстового редактора.
 
-[![npm version](https://badge.fury.io/js/summernote-file.svg)](https://badge.fury.io/js/summernote-file)
 
 _Сделан на основе плагина [summernote-audio](https://github.com/taalendigitaal/summernote-audio)._
 
@@ -26,10 +25,6 @@ _Сделан на основе плагина [summernote-audio](https://github
 
 <script type="text/javascript" src="summernote-file.js"></script>
 ```
-
-### NPM
-
-Вы можете добавить файл summernote в свой проект с помощью [npm](https://www.npmjs.com/) : npm i summernote-file
 
 
 ### Конфигурация
