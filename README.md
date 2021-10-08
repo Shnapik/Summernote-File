@@ -1,20 +1,26 @@
 # summernote-file
 
-/!\ THIS PROJECT IS NOT MAINTAINED ANYMORE
+Summernote File - Плагин для текстового редактора Summernote, который позволяет загружать картинки и различные файлы и вставлять их в текстовое поле редактора в виде ссылки на него. 
 
-[Summernote](https://summernote.org/) plugin to insert files by URL or file upload.
+<b>Версия: 1.1 от 09.10.2021<br><br>
+
+<b>Предложения/Баги/Ошибки принимаются на сайте: </b> [culabra.ru](https://culabra.ru/)<br>
+
+
+
+[Summernote](https://summernote.org/) сам плагин текстового редактора.
 
 [![npm version](https://badge.fury.io/js/summernote-file.svg)](https://badge.fury.io/js/summernote-file)
 
-_Based on the [summernote-audio](https://github.com/taalendigitaal/summernote-audio) plugin._
+_Сделан на основе плагина [summernote-audio](https://github.com/taalendigitaal/summernote-audio)._
 
-It can handle **picture files** (jpg, png, gif, wvg, webp), **audio files** (mp3, ogg, oga), and **video files** (mp4, ogv, webm) without any upload, in base64.
+Он может обрабатывать **изображения** (jpg, png, gif, wvg, webp), **аудио файлы** (mp3, ogg, oga), и **видео файлы** (mp4, ogv, webm) и "другие" без загрузки в base64.
 
-You can also define your own handle in order to **upload these files, and any other type of file** into your server, and render them in Summernote.
+Вы также можете определить свой собственный дескриптор, чтобы  **загружать эти файлы и файлы любого другого типа** на свой сервер и отображать их в Summernote.
 
-### Classic use
+### Классическое использование
 
-Include the plugin script after including Summernote:
+Включите скрипт плагина после включения Summernote:
 
 ```html
 <!-- include jquery, bootstrap, summernote here -->
@@ -24,12 +30,12 @@ Include the plugin script after including Summernote:
 
 ### NPM
 
-You can add summernote-file in your project with using [npm](https://www.npmjs.com/) : npm i summernote-file
+Вы можете добавить файл summernote в свой проект с помощью [npm](https://www.npmjs.com/) : npm i summernote-file
 
 
-### Configuration
+### Конфигурация
 
-Add the file button to the Summernote toolbar:
+Добавьте кнопку файла на панель инструментов Summernote:
 
 ```javascript
 $('.summernote').summernote({
@@ -39,109 +45,128 @@ $('.summernote').summernote({
 });
 ```
 
-### File type
+### Тип файла
 
-By default, the plugin can handle picture, audio, and video files, in **base64**.
-In order to handle all type of files, **you have to implement the "onFileUpload" callback** for uploading them into you server :
+По умолчанию плагин может обрабатывать изображения, аудио и видео файлы в **base64**. 
+Чтобы обрабатывать все типы файлов, **вы должны реализовать обратный вызов (callback) onFileUpload** для их загрузки на свой сервер:
+
 
 ```javascript
 $('.summernote').summernote({
-    //Your classic summernote code here
+    // Ваш код с основными настройками summernote здесь
 
     //Define the callback
     callbacks: {
         onFileUpload: function(file) {
-            //Your own code goes here
+            // Здесь идет ваш собственный код 
         },
     },
 });
 ```
 
-### Callback exemple for uploading
+### Пример функции Callback для загрузки 
 
-Here is an exemple of the callback (with upload progress handling) :
+Вот пример Callback (с обработкой хода загрузки):
+
 
 ```javascript
 $('.summernote').summernote({
-    //Your classic summernote code here
+    //Ваш код запуска summernote, согласно официальной документации.
     
-    //Define the callback
+    //Определение функции и свои дополнения callback
     callbacks: {
         onFileUpload: function(file) {
-            myOwnCallBack(file[0]);
+            uploadFile(file[0]);
         },
     },
 });
 
-function myOwnCallBack(file) {
-    let data = new FormData();
+function uploadFile(file, editor, welEditable) {
+    var data = new FormData();
     data.append("file", file);
     $.ajax({
-        data: data,
-        type: "POST",
-        url: "file-uploader.php", //Your own back-end uploader
+        url: '/filemanager/upload/', //Ваш собственный обработчик
         cache: false,
         contentType: false,
         processData: false,
-        xhr: function() { //Handle progress upload
+        data: data,
+        type: "POST",
+		dataType: 'json',
+		xhr: function() { //Добавляем прогресс бар при загрузке файлов
             let myXhr = $.ajaxSettings.xhr();
+			$('.note-editable').after('<progress></progress>');
             if (myXhr.upload) myXhr.upload.addEventListener('progress', progressHandlingFunction, false);
             return myXhr;
         },
-        success: function(reponse) {
-            if(reponse.status === true) {
-                let listMimeImg = ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/svg'];
-                let listMimeAudio = ['audio/mpeg', 'audio/ogg'];
-                let listMimeVideo = ['video/mpeg', 'video/mp4', 'video/webm'];
-                let elem;
+        success: function(url) {
+			$('.summernote').summernote('insertImage', url);
 
-                if (listMimeImg.indexOf(file.type) > -1) {
-                    //Picture
-                    $('.summernote').summernote('editor.insertImage', reponse.filename);
-                } else if (listMimeAudio.indexOf(file.type) > -1) {
-                    //Audio
-                    elem = document.createElement("audio");
-                    elem.setAttribute("src", reponse.filename);
-                    elem.setAttribute("controls", "controls");
-                    elem.setAttribute("preload", "metadata");
-                    $('.summernote').summernote('editor.insertNode', elem);
-                } else if (listMimeVideo.indexOf(file.type) > -1) {
-                    //Video
-                    elem = document.createElement("video");
-                    elem.setAttribute("src", reponse.filename);
-                    elem.setAttribute("controls", "controls");
-                    elem.setAttribute("preload", "metadata");
-                    $('.summernote').summernote('editor.insertNode', elem);
-                } else {
-                    //Other file type
-                    elem = document.createElement("a");
-                    let linkText = document.createTextNode(file.name);
-                    elem.appendChild(linkText);
-                    elem.title = file.name;
-                    elem.href = reponse.filename;
-                    $('.summernote').summernote('editor.insertNode', elem);
-                }
-            }
+			let listMimeImg = ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/svg'];
+			let listMimeAudio = ['audio/mpeg', 'audio/ogg'];
+			let listMimeVideo = ['video/mpeg', 'video/mp4', 'video/webm'];
+			let elem;
+
+			if (listMimeImg.indexOf(file.type) > -1) {
+				//Изображения
+				$('.summernote').summernote('insertImage', url);
+			} else if (listMimeAudio.indexOf(file.type) > -1) {
+				//Аудио
+				elem = document.createElement("audio");
+				elem.setAttribute("src", url);
+				elem.setAttribute("controls", "controls");
+				elem.setAttribute("preload", "metadata");
+				$('.summernote').summernote('insertNode', elem);
+			} else if (listMimeVideo.indexOf(file.type) > -1) {
+				//Видео
+				elem = document.createElement("video");
+				elem.setAttribute("src", url);
+				elem.setAttribute("controls", "controls");
+				elem.setAttribute("preload", "metadata");
+				$('.summernote').summernote('insertNode', elem);
+			} else {
+				//Другие типы файлов
+				elem = document.createElement("a");
+				let linkText = document.createTextNode(file.name);
+				elem.appendChild(linkText);
+				elem.title = file.name;
+				elem.href = url;
+				$('.summernote').summernote('insertNode', elem);
+			}
+		},
+        error: function(data) {
+            console.log(data);
         }
     });
 }
 
 function progressHandlingFunction(e) {
     if (e.lengthComputable) {
-        //Log current progress
-        console.log((e.loaded / e.total * 100) + '%');
+        //Изменение хода загрузки прогресс бара
+		$('progress').attr({value:e.loaded, max:e.total});
+    
+        //Отображение в консоли информации о ходе загрузки файла
+        //console.log((e.loaded / e.total * 100) + '%');
 
-        //Reset progress on complete
+        //Сброс прогресс бара после загрузки
         if (e.loaded === e.total) {
-            console.log("Upload finished.");
+            //Обнуляем прогресс бар после загрузки файла
+			$('progress').attr('value','0.0');
+    
+            //Удаляем прогресс бар после загрузки файла
+			$('progress').remove();
+    
+            //Отображение в консоли информамции по завершению загрузки
+            //console.log("Загрузка завершена.");
         }
     }
 }
+
 ```
 
-### Translations
+### Локализация
 
-Currently supports the following languages:
+В настоящее время поддерживает следующие языки:
+* Русский
 * English
 * French
 * Czech
