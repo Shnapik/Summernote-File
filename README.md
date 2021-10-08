@@ -54,7 +54,7 @@ $('.summernote').summernote({
 $('.summernote').summernote({
     // Ваш код с основными настройками summernote здесь
 
-    //Define the callback
+    //Функция callbacks и ее настройки
     callbacks: {
         onFileUpload: function(file) {
             // Здесь идет ваш собственный код 
